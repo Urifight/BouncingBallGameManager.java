@@ -36,9 +36,7 @@ public class Narrow extends Status
     @Override
     public void enablePower(GameObject otherObj) {
 
-        System.out.println(otherObj.getDimensions());
         otherObj.setDimensions(new Vector2(otherObj.getDimensions().x() - 30, otherObj.getDimensions().y()));
-        System.out.println(otherObj.getDimensions());
 
     }
 }

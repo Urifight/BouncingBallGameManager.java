@@ -29,9 +29,11 @@ public class RemoveBrickStrategy implements  CollisionStrategy
     {
         gameObjectCollection.removeGameObject(thisObj, Layer.STATIC_OBJECTS); //MUST ADD STATIC_OBJECTS WHEN DELETING
         bricksLeft.decrement();
-        System.out.println(bricksLeft.value());
         this.thisObj = thisObj;
         wasBrickBroken = true;
+
+
+
 
 
     }

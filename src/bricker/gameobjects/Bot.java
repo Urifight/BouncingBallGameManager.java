@@ -50,7 +50,14 @@ public abstract class Bot extends GameObject
 
     public void escapeBall()
     {
-        if (this.getCenter().x() < windowController.getWindowDimensions().x() - getDimensions().x() / 2)
+        if (getCenter().x() < windowController.getWindowDimensions().x() / 2
+            && getCenter().x() >= 0 + getDimensions().x() / 2)
+        {
+            setVelocity(Vector2.LEFT.mult(MOVEMENT_SPEED));
+
+        }
+        else if (getCenter().x() < windowController.getWindowDimensions().x() - getDimensions().x() / 2
+                && getCenter().x() > windowController.getWindowDimensions().x() / 2)
         {
             setVelocity(Vector2.RIGHT.mult(MOVEMENT_SPEED));
         }

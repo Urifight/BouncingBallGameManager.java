@@ -48,11 +48,12 @@ public class UserPaddleStrategy extends RemoveBrickStrategy {
     }
 
 
-    @Override
-    public void onCollision(GameObject thisObj, GameObject otherObj) {
-        super.onCollision(thisObj, otherObj);
-    }
-}
+//    @Override
+//    public void onCollision(GameObject thisObj, GameObject otherObj)
+//    {
+//        super.onCollision(thisObj, otherObj);
+//
+//
 //        countCollisions++;
 //
 //        Vector2 windowDimensions = windowController.getWindowDimensions();
@@ -62,11 +63,11 @@ public class UserPaddleStrategy extends RemoveBrickStrategy {
 //                new Vector2(paddle.getDimensions().x(), paddle.getDimensions().y()),
 //                paddleImage,
 //                windowDimensions,
-//                new UserMovementStragety(inputListener, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT), true, gameObjectCollection, paddleSizeBuffChange);
+//                new UserMovementStrategy(inputListener, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT), true, gameObjectCollection, paddleSizeBuffChange);
 //            //rnd.nextFloat(10, windowDimensions.x() - 10)
 //
 //        userPaddle.setCenter(new Vector2(paddle.getCenter().x(), rnd.nextFloat(bricksTotalHeight + 30, windowDimensions.y() - 10)));
 //
 //        gameObjectCollection.addGameObject(userPaddle);
 //    }
-//}
+}

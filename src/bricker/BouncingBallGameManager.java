@@ -55,7 +55,7 @@ public class BouncingBallGameManager extends GameManager
     private int lives;
     private static final float WALL_SIZE = 5;
     private static final float PADDLE_HEIGHT = 30;//20;
-    private static final float PADDLE_WIDTH = 210;//120;
+    private static final float PADDLE_WIDTH = 210;
 
     private Counter collisions = new Counter();
 
@@ -66,7 +66,7 @@ public class BouncingBallGameManager extends GameManager
     private GameObject heart;
 
     private static final float BALL_RADIUS = 35;
-    private static final float BALL_SPEED = 400;
+    private float ballSpeed = 400;
 
 
 
@@ -76,6 +76,7 @@ public class BouncingBallGameManager extends GameManager
 
     private Counter bricksLeft = new Counter();
 
+    private Counter ballFirstCollision = new Counter(0);
     private static final float BRICK_HEIGHT = 30;//15;
 
     private static final float SPACE_SIZE_BETWEEN_BRICKS = 0f;
@@ -86,9 +87,11 @@ public class BouncingBallGameManager extends GameManager
     GameObject[] hearts;
     private GameObject heart2;
     private GameObject heart3;
-    private int maxStrategies = 8;
+    private int maxStrategies = 7;
     private int minStrategies = 1;
     private GameObject userPaddle;
+    private float originalBallSpeedX;
+    private float originalBallSpeedY;
 
     public BouncingBallGameManager(String windowTitle, Vector2 windowDimensions) {
         super(windowTitle, windowDimensions);
@@ -100,26 +103,37 @@ public class BouncingBallGameManager extends GameManager
                 imageReader.readImage("assets/ball.png", true);
         Sound collisionSound = soundReader.readSound("assets/blop.wav");
         ball = new Ball(
-                new Vector2(0, 0), new Vector2(BALL_RADIUS, BALL_RADIUS), ballImage, collisionSound, windowController, (int)BALL_SPEED, collisions, direction, ballCollisionsForCamera);
+                new Vector2(0, 0), new Vector2(BALL_RADIUS, BALL_RADIUS), ballImage, collisionSound, windowController, (int)ballSpeed, collisions, direction, ballCollisionsForCamera);
 
         Vector2 windowDimensions = windowController.getWindowDimensions();
-        ball.setCenter(windowDimensions.mult(0.5f));;
         gameObjects().addGameObject(ball);
 
-        float ballVelX = BALL_SPEED;
-        float ballVelY = BALL_SPEED;
+        restartBall();
+
+
+
+    }
+
+    private void restartBall()
+    {
+        //ballFirstCollision.reset();
+        ballSpeed = 400;
+        ball.setCenter(windowDimensions.mult(0.5f));;
+        float ballVelX = 1;
+        float ballVelY = 1;
         if (rnd.nextBoolean())
         {
             ballVelX *= rnd.nextFloat(-1, 1);
         }
         if (rnd.nextBoolean())
         {
-            ballVelY *= rnd.nextFloat(-1, 1);
+            ballVelY *= -1;
         }
+        ballVelX *= ballSpeed;
+        ballVelY *= ballSpeed;
+        originalBallSpeedX = ballVelX * 2;
+        originalBallSpeedY = ballVelY * 2;
         ball.setVelocity(new Vector2(ballVelX, ballVelY));
-
-
-
     }
 
 
@@ -175,8 +189,6 @@ public class BouncingBallGameManager extends GameManager
     public void update(float deltaTime) {
         super.update(deltaTime);
         checkForGameEnd();
-        System.out.println(bricksLeft.value());
-
     }
 
     private void checkForGameEnd()
@@ -184,16 +196,16 @@ public class BouncingBallGameManager extends GameManager
         float ballHeight = ball.getCenter().y();
 
         String prompt = "";
-        if (ballHeight > windowDimensions.y())
+        if (ballHeight > windowDimensions.y() + 50)
         {
 
             loseLife();
-            gameObjects().removeGameObject(hearts[lives], Layer.STATIC_OBJECTS);
+            //gameObjects().removeGameObject(hearts[lives], Layer.STATIC_OBJECTS);
 
             if (lives == 0)
                 prompt = "You lose";
             else
-                ball.setCenter(windowDimensions.mult(0.5f));
+                restartBall();
         }
 
         if (bricksLeft.value() <= 0)
@@ -272,14 +284,11 @@ public void loseLife()
     {
         slowOrQuicken.decrement();
         boolean twoPlayer = false;//windowController.openYesNoDialog("2 player?");
-        boolean normalMode = windowController.openYesNoDialog("Normal mode?");
+        boolean normalMode = true;//windowController.openYesNoDialog("Normal mode?");
         if (!normalMode) {
             minStrategies = 7;
             maxStrategies = 8;
         }
-        else
-            maxStrategies = 7;
-
         lives = 3;
         hearts = new GameObject[lives];
         this.windowController = windowController;
@@ -287,7 +296,7 @@ public void loseLife()
 
         //initialization
         super.initializeGame(imageReader, soundReader, inputListener, windowController);
-        windowController.setTargetFramerate(50);
+        windowController.setTargetFramerate(200);
         windowDimensions = windowController.getWindowDimensions();
 
 
@@ -329,7 +338,7 @@ public void loseLife()
         // creating walls
 
         Renderable wallImage = imageReader.readImage("assets/wall.png", true);
-        GameObject wall = new Wall(Vector2.ZERO, new Vector2(WALL_SIZE + 10, windowDimensions.y()), wallImage);
+        GameObject wall = new Wall(Vector2.ZERO, new Vector2(WALL_SIZE + 1, windowDimensions.y()), wallImage);
         gameObjects().addGameObject(wall, Layer.STATIC_OBJECTS);
         GameObject wall2 = new Wall(new Vector2(windowDimensions.x() - WALL_SIZE - 10, 0), new Vector2(windowDimensions.x() - WALL_SIZE, windowDimensions.y()), wallImage);
         gameObjects().addGameObject(wall2, Layer.STATIC_OBJECTS);
@@ -359,7 +368,7 @@ public void loseLife()
         Renderable quickenMotionImage = imageReader.readImage("assets/quicken.png", true);
 
         // mockBall
-        Renderable mockBallImage = imageReader.readImage("assets/mockBall.png", false);
+        Renderable mockBallImage = imageReader.readImage("assets/mockBall.png", true);
         Sound collisionSound = soundReader.readSound("assets/blop.wav");
 
         // bots
@@ -376,7 +385,7 @@ public void loseLife()
                 collisionSound,
                 paddleImage,
                 bricksTotalHeight,
-                (int) BALL_SPEED,
+                (int) ballSpeed,
                 gravityImage,
                 collisions,
                 direction,
@@ -435,18 +444,22 @@ public void loseLife()
         // author credit
         Renderable authorImage = imageReader.readImage("assets/author.png", false);
         GameObject author = new Author(Vector2.ZERO, new Vector2(windowDimensions.x() / 8, windowDimensions.y() / 12), authorImage);
-        author.setCenter(new Vector2(windowDimensions.x() - windowDimensions.x() / 10, windowDimensions.y() - 50));
+        author.setCenter(new Vector2(windowDimensions.x() - author.getDimensions().x() / 2, windowDimensions.y() - author.getDimensions().y() / 2));
         gameObjects().addGameObject(author, -198);
 
 
         //windowController.setTimeScale(0.5f);
+        windowController.showMessageBox("Starting game...");
     }
+
+
 
     public static void main(String[] args)
     {
         Math.pow(1, 2);
         new BouncingBallGameManager(
                 "Bricker",
-                new Vector2(1535, 800)).run();
+                new Vector2(1530, 785)).run();
     }
+
 }
