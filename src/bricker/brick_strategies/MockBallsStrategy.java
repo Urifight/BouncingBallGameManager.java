@@ -22,6 +22,7 @@ public class MockBallsStrategy extends RemoveBrickStrategy
     private Counter direction;
     private Counter ballCollisionsForCamera;
     private boolean normalMode;
+    private Counter ballFirstCollision;
 
     public MockBallsStrategy(GameObjectCollection gameObjectCollection,
                              Counter bricksLeft,
@@ -32,7 +33,8 @@ public class MockBallsStrategy extends RemoveBrickStrategy
                              Counter collisions,
                              Counter direction,
                              Counter ballCollisionsForCamera,
-                             boolean normalMode) {
+                             boolean normalMode,
+                             Counter ballFirstCollision) {
         super(gameObjectCollection, bricksLeft);
         this.gameObjectCollection = gameObjectCollection;
         this.ballSpeed = ballSpeed;
@@ -45,25 +47,26 @@ public class MockBallsStrategy extends RemoveBrickStrategy
         this.direction = direction;
         this.ballCollisionsForCamera = ballCollisionsForCamera;
         this.normalMode = normalMode;
+        this.ballFirstCollision = ballFirstCollision;
     }
 
     @Override
     public void onCollision(GameObject thisObj, GameObject otherObj) {
         super.onCollision(thisObj, otherObj);
         GameObject mockBall = new MockBall(
-                Vector2.ZERO, new Vector2(BALL_RADIUS, BALL_RADIUS), mockBallImage, collisionSound, windowController, ballSpeed, gameObjectCollection, collisions, direction, ballCollisionsForCamera);
+                Vector2.ZERO, new Vector2(BALL_RADIUS, BALL_RADIUS), mockBallImage, collisionSound, windowController, ballSpeed, gameObjectCollection, collisions, direction, ballCollisionsForCamera, ballFirstCollision);
 
         mockBall.setCenter(new Vector2(getThisObj().getCenter().x(), getThisObj().getCenter().y() + 90));
         gameObjectCollection.addGameObject(mockBall);
 
         if (!normalMode) {
             mockBall = new MockBall(
-                    Vector2.ZERO, new Vector2(BALL_RADIUS, BALL_RADIUS), mockBallImage, collisionSound, windowController, ballSpeed, gameObjectCollection, collisions, direction, ballCollisionsForCamera);
+                    Vector2.ZERO, new Vector2(BALL_RADIUS, BALL_RADIUS), mockBallImage, collisionSound, windowController, ballSpeed, gameObjectCollection, collisions, direction, ballCollisionsForCamera, ballFirstCollision);
 
             mockBall.setCenter(new Vector2(getThisObj().getCenter().x() + 30, getThisObj().getCenter().y() + 90));
             gameObjectCollection.addGameObject(mockBall);
             mockBall = new MockBall(
-                    Vector2.ZERO, new Vector2(BALL_RADIUS, BALL_RADIUS), mockBallImage, collisionSound, windowController, ballSpeed, gameObjectCollection, collisions, direction, ballCollisionsForCamera);
+                    Vector2.ZERO, new Vector2(BALL_RADIUS, BALL_RADIUS), mockBallImage, collisionSound, windowController, ballSpeed, gameObjectCollection, collisions, direction, ballCollisionsForCamera, ballFirstCollision);
 
             mockBall.setCenter(new Vector2(getThisObj().getCenter().x() - 30, getThisObj().getCenter().y() + 90));
             gameObjectCollection.addGameObject(mockBall);

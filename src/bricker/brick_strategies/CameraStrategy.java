@@ -41,8 +41,12 @@ public class CameraStrategy extends RemoveBrickStrategy
     }
 
 
+
+
     public void onCollision(GameObject thisObj, GameObject otherObj)
     {
+        super.onCollision(thisObj, otherObj);
+
         ballCollisionsForCamera.increment();
         cameraNewPosition();
     }

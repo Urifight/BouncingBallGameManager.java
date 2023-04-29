@@ -49,6 +49,9 @@ public class BrickStrategyFactory {
     private Counter direction;
     private GameObject paddle;
     private boolean normalMode;
+    private Counter ballFirstCollision;
+    private float originalBallSpeedX;
+    private float originalBallSpeedY;
 
     public BrickStrategyFactory(GameObjectCollection gameObjectCollection,
                                 Counter bricksLeft,
@@ -80,7 +83,8 @@ public class BrickStrategyFactory {
                                 Renderable badBotImage,
                                 int minStrategies,
                                 int maxStrategies,
-                                GameObject paddle, boolean normalMode)
+                                GameObject paddle,
+                                boolean normalMode)
     {
         this.bricksLeft = bricksLeft;
         this.ballSpeed = ballSpeed;
@@ -114,14 +118,13 @@ public class BrickStrategyFactory {
         this.maxStrategies = maxStrategies;
         this.paddle = paddle;
         this.normalMode = normalMode;
+        this.ballFirstCollision = ballFirstCollision;
         this.redBrick = redBrick;
     }
 
     public CollisionStrategy getStrategy() {
         //choose randomly between the possible brick strategies
         int chosenStrategy;
-        System.out.println(minStrategies);
-        System.out.println(maxStrategies);
         chosenStrategy = random.nextInt(minStrategies, maxStrategies);
 //        while (chosenStrategy == randomStrategy.value()) {
 //            chosenStrategy = random.nextInt(1, MAX_STRATEGIES);
@@ -136,7 +139,7 @@ public class BrickStrategyFactory {
                 break;
 
             case 1:
-                collisionStrategy = new MockBallsStrategy(gameObjectCollection, bricksLeft, mockBallImage, windowController, collisionSound, ballSpeed, collisions, direction, ballCollisionsForCamera, normalMode);
+                collisionStrategy = new MockBallsStrategy(gameObjectCollection, bricksLeft, mockBallImage, windowController, collisionSound, ballSpeed, collisions, direction, ballCollisionsForCamera, normalMode, ballFirstCollision);
                 break;
 
             case 2:
@@ -182,7 +185,7 @@ public class BrickStrategyFactory {
                     break;
 
                 case 1:
-                    chosenCollisionStrategy = new MockBallsStrategy(gameObjectCollection, bricksLeft, mockBallImage, windowController, collisionSound, ballSpeed, collisions, direction, ballCollisionsForCamera, normalMode);
+                    chosenCollisionStrategy = new MockBallsStrategy(gameObjectCollection, bricksLeft, mockBallImage, windowController, collisionSound, ballSpeed, collisions, direction, ballCollisionsForCamera, normalMode, ballFirstCollision);
                     break;
 
                 case 2:

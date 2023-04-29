@@ -11,6 +11,8 @@ import danogl.util.Vector2;
 public class Ball extends GameObject
 {
     private static final int  MAX_COLLISIONS = 4;
+    private final float ballOriginalSpeedX;
+    private final float ballOriginalSpeedY;
     private int changingBallSpeed;
     private Vector2 windowDimensions;
     private static int originalBallSpeed;
@@ -54,6 +56,10 @@ public class Ball extends GameObject
         this.transform().setAcceleration(Vector2.ZERO);
 
         this.setTag("BALL");
+
+        ballOriginalSpeedX = getVelocity().x() * 2;
+        ballOriginalSpeedY = getVelocity().y() * 2;
+
 
 
     }
@@ -102,6 +108,7 @@ public class Ball extends GameObject
     @Override
     public void onCollisionEnter(GameObject other, Collision collision) {
         super.onCollisionEnter(other, collision);
+
         int xVel = changingBallSpeed;
         //int yVel = changingBallSpeed;
         if (getVelocity().x() < 0) {

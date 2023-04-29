@@ -24,10 +24,13 @@ public class DoubleStrategy implements CollisionStrategy
     @Override
     public void onCollision(GameObject thisObj, GameObject otherObj)
     {
-        collisionStrategy1.onCollision(thisObj, otherObj);
+        System.out.println("DOUBLE STRATEGY");
 
-        collisionStrategy2.onCollision(thisObj, otherObj);
+        collisionStrategy1.onCollision(thisObj, otherObj);
         bricksLeft.increaseBy(1);
+        System.out.println(bricksLeft.value());
+        collisionStrategy2.onCollision(thisObj, otherObj);
+
 
 
     }

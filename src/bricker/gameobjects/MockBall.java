@@ -13,6 +13,7 @@ public class MockBall extends Ball
 {
 
     private Counter direction;
+    private Counter ballFirstCollision;
     private final WindowController windowController;
     private final GameObjectCollection gameObjectCollection;
 
@@ -33,18 +34,19 @@ public class MockBall extends Ball
      * @param ballCollisionsForCamera
      */
 
-    public MockBall(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable, Sound collisionSound, WindowController windowController, int ballSpeed, GameObjectCollection gameObjectCollection, Counter collision, Counter direction, Counter ballCollisionsForCamera) {
+    public MockBall(Vector2 topLeftCorner, Vector2 dimensions, Renderable renderable, Sound collisionSound, WindowController windowController, int ballSpeed, GameObjectCollection gameObjectCollection, Counter collision, Counter direction, Counter ballCollisionsForCamera, Counter ballFirstCollision) {
         super(topLeftCorner, dimensions, renderable, collisionSound, windowController, ballSpeed, collision, direction, ballCollisionsForCamera);
         this.windowController = windowController;
         this.gameObjectCollection = gameObjectCollection;
         this.direction = direction;
+        this.ballFirstCollision = ballFirstCollision;
         float ballVelX = ballSpeed;
         float ballVelY = ballSpeed;
         if (rnd.nextBoolean())
         {
-            ballVelX *= rnd.nextFloat(-1, 1);
+            ballVelX *= -1;//rnd.nextFloat(-1, 1);
         }
-            ballVelY *= 1;
+        ballVelY *= rnd.nextFloat(-1, 1);//ballVelY *= 1;
 
         this.setVelocity(new Vector2(ballVelX, ballVelY));
     }

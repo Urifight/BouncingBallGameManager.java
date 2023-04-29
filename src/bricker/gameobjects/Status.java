@@ -44,7 +44,6 @@ public abstract class Status extends GameObject
     public void onCollisionEnter(GameObject other, Collision collision) {
         super.onCollisionEnter(other, collision);
         if (other.getTag().equals("PADDLE")) {
-            System.out.println("COLLIDED" + other.getTag());
             gameObjectCollection.removeGameObject(this, Layer.STATIC_OBJECTS);
             enablePower(other);
         }
