@@ -22,5 +22,6 @@
         <jarDirectory url="file://$MODULE_DIR$/../MooooC/DanoGameLab" recursive="false" />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="lib" level="project" />
   </component>
 </module>
